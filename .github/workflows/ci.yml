@@ -16,7 +16,7 @@ jobs:
       DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
       EMAIL_USER: ${{ secrets.EMAIL_USER }}
       EMAIL_PASS: ${{ secrets.EMAIL_PASS }}
-      EMAIL_TO: ${{ secrets.EMAIL_TO }}
+      EMAIL_TO: ${{ secrets.EMAIL_ID }}
 
     steps:
       # Step 1: Checkout repository
@@ -80,7 +80,7 @@ jobs:
           username: ${{ secrets.EMAIL_USER }}
           password: ${{ secrets.EMAIL_PASS }}
           from: ${{ secrets.EMAIL_USER }}
-          to: ${{ secrets.EMAIL_TO }}
+          to: ${{ secrets.EMAIL_ID }}
           subject: "CI/CD Pipeline Status"
           body: "Your DevOps pipeline for python-microservices-devops has completed. Check logs for details."
           secure: true
