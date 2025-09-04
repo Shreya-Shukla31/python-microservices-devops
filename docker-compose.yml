@@ -1,5 +1,5 @@
-#docker-compose :
-#version: "3.8"
+version: "3.8"
+
 services:
   db:
     image: postgres:15
@@ -12,14 +12,14 @@ services:
       - db-data:/var/lib/postgresql/data
 
   logger:
-    build: ./logger
+    image: ${DOCKERHUB_USERNAME}/logger:latest
     ports:
       - "6000:6000"
     volumes:
       - ./logger/logs:/app/logs
 
   backend:
-    build: ./backend
+    image: ${DOCKERHUB_USERNAME}/backend:latest
     depends_on:
       - db
       - logger
@@ -29,10 +29,10 @@ services:
       DATABASE_URL: ${DATABASE_URL}
       LOGGER_URL: ${LOGGER_URL}
     volumes:
-      - ./backend:/app 
+      - ./backend:/app
 
   frontend:
-    build: ./frontend
+    image: ${DOCKERHUB_USERNAME}/frontend:latest
     depends_on:
       - backend
     ports:
