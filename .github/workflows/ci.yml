@@ -24,6 +24,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r backend/requirements.txt || echo "No backend requirements"
           pip install -r frontend/requirements.txt || echo "No frontend requirements"
+          pip install -r logger/requirements.txt || echo "No logger requirements"
 
       - name: Run tests
         run: |
@@ -43,12 +44,32 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and push Docker image
+      # Build & push backend
+      - name: Build and push backend
         uses: docker/build-push-action@v4
         with:
-          context: .
+          context: ./backend
+          file: ./backend/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/python-microservices-devops:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/backend:latest
+
+      # Build & push frontend
+      - name: Build and push frontend
+        uses: docker/build-push-action@v4
+        with:
+          context: ./frontend
+          file: ./frontend/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/frontend:latest
+
+      # Build & push logger
+      - name: Build and push logger
+        uses: docker/build-push-action@v4
+        with:
+          context: ./logger
+          file: ./logger/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/logger:latest
 
       - name: Send email notification
         uses: dawidd6/action-send-mail@v3
